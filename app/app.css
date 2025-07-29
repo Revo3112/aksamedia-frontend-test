@@ -1,10 +1,5 @@
 @import "tailwindcss";
 
-/* =============================================
-   GLOBAL DARK MODE OVERRIDE - SEMUA ELEMENT
-   FULL CONTRAST & COMPREHENSIVE STYLING
-   ============================================= */
-
 /* Root color scheme setup */
 html.dark {
   color-scheme: dark;
@@ -14,7 +9,6 @@ html:not(.dark) {
   color-scheme: light;
 }
 
-/* Universal transition for ALL elements - SMOOTHER TRANSITIONS */
 * {
   transition:
     background-color 150ms cubic-bezier(0.4, 0, 0.2, 1),
@@ -254,7 +248,6 @@ button[type="reset"],
   color: rgb(147 197 253); /* blue-300 */
 }
 
-/* ========== CARD & PANEL ELEMENTS - SMOOTH TRANSITIONS ========== */
 .card,
 .panel,
 [class*="bg-white"],
@@ -319,7 +312,6 @@ pattern {
 }
 
 /* ========== DASHBOARD ICONS - TERANG/PUTIH UNTUK LIGHT MODE ========== */
-/* Semua SVG icon di light mode dibuat terang/putih untuk kontras yang baik */
 :not(.dark) svg,
 :not(.dark) path,
 :not(.dark) circle,
@@ -334,7 +326,6 @@ pattern {
   stroke: rgb(255 255 255);
 }
 
-/* EXCEPTION: Theme toggle switch icons should NOT be white */
 :not(.dark) .theme-toggle-switch svg,
 :not(.dark) .theme-toggle-switch path,
 :not(.dark) .theme-toggle-switch circle,
@@ -349,7 +340,6 @@ pattern {
   stroke: currentColor !important;
 }
 
-/* Exception: Icon di dalam text yang memiliki background putih/terang tetap gelap */
 :not(.dark) .bg-white svg,
 :not(.dark) .bg-gray-50 svg,
 :not(.dark) .bg-gray-100 svg,
@@ -359,7 +349,6 @@ pattern {
   stroke: rgb(55 65 81);
 }
 
-/* Exception: Icon di button secondary agar kontras baik */
 :not(.dark) .bg-gray-200 svg {
   color: rgb(17 24 39); /* gray-900 untuk kontras maksimal */
   fill: rgb(17 24 39);
@@ -440,10 +429,6 @@ object {
     border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
-
-/* =========================================
-   TAILWIND CLASS OVERRIDES - FORCE CONTRAST
-   ========================================= */
 
 /* Background color overrides - SMOOTH TRANSITIONS */
 .bg-white {
@@ -568,7 +553,6 @@ object {
   border-color: rgb(55 65 81);
 }
 
-/* Navbar and component specific overrides - SMOOTH TRANSITIONS */
 nav,
 .navbar {
   background-color: rgb(255 255 255) !important;
@@ -669,11 +653,6 @@ button:hover.bg-red-600,
 [class*="bg-"] {
   color: inherit;
 }
-
-/* =========================================
-   COMPREHENSIVE ELEMENT TARGETING
-   MEMASTIKAN TIDAK ADA YANG TERLEWAT
-   ========================================= */
 
 /* PRIORITY 1: Universal base override */
 *:not(svg):not(path):not(g):not(circle):not(rect) {
@@ -778,9 +757,6 @@ button:hover.bg-red-600,
   color: inherit;
 }
 
-/* =========================================
-   EMERGENCY FALLBACK RULES
-   ========================================= */
 
 /* If nothing else works, force all text to be readable */
 body * {
@@ -810,10 +786,6 @@ body * {
   background-color: rgb(31 41 55);
   color: rgb(255 255 255);
 }
-
-/* =========================================
-   THEME OVERRIDE FIX - PRIORITY UTAMA
-   ========================================= */
 
 /* Force manual theme override */
 :root {
@@ -899,10 +871,6 @@ html.dark .border-gray-300 {
   border-color: rgb(55 65 81);
 }
 
-/* =========================================
-   ORIGINAL THEME SETUP
-   ========================================= */
-
 [data-theme="dark"] {
   color-scheme: dark;
 }
@@ -987,12 +955,12 @@ a {
   transform: scale(1.05);
 }
 
-/* ========== THEME TOGGLE SWITCH - MODERN DESIGN ========== */
 .theme-toggle-switch {
   cursor: pointer !important;
   background: transparent !important;
   outline: none;
   transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
 }
 
 .theme-toggle-switch:hover {
@@ -1003,26 +971,45 @@ a {
   transform: scale(0.95);
 }
 
-/* Toggle switch track styles */
+/* 3-State Toggle switch track styles */
 .theme-toggle-switch .bg-blue-600 {
-  background-color: rgb(37 99 235) !important; /* blue-600 */
+  background-color: rgb(37 99 235) !important; /* blue-600 for dark */
   box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
 }
 
 .theme-toggle-switch .bg-gray-300 {
-  background-color: rgb(209 213 219) !important; /* gray-300 */
+  background-color: rgb(209 213 219) !important; /* gray-300 for light */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* System mode gradient background */
+.theme-toggle-switch .bg-gradient-to-r {
+  background: linear-gradient(
+    to right,
+    rgb(156 163 175),
+    rgb(59 130 246)
+  ) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.15);
 }
 
 /* Dark mode track */
 .dark .theme-toggle-switch .bg-blue-600 {
-  background-color: rgb(59 130 246) !important; /* blue-500 */
+  background-color: rgb(59 130 246) !important; /* blue-500 for dark mode */
   box-shadow: 0 2px 4px rgba(59, 130, 246, 0.3);
 }
 
 .dark .theme-toggle-switch .bg-gray-300 {
-  background-color: rgb(75 85 99) !important; /* gray-600 */
+  background-color: rgb(75 85 99) !important; /* gray-600 for dark mode */
   box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+.dark .theme-toggle-switch .bg-gradient-to-r {
+  background: linear-gradient(
+    to right,
+    rgb(107 114 128),
+    rgb(96 165 250)
+  ) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.25);
 }
 
 /* Toggle switch circle */
@@ -1038,6 +1025,17 @@ a {
   box-shadow:
     0 2px 4px rgba(0, 0, 0, 0.2),
     0 1px 2px rgba(0, 0, 0, 0.1) !important;
+}
+
+/* Tooltip styling for 3-state toggle */
+.theme-toggle-switch .bg-gray-900 {
+  background-color: rgb(17 24 39) !important;
+  color: rgb(255 255 255) !important;
+}
+
+.dark .theme-toggle-switch .bg-gray-700 {
+  background-color: rgb(55 65 81) !important;
+  color: rgb(255 255 255) !important;
 }
 
 /* Toggle switch icons - Force proper colors */
@@ -1060,7 +1058,6 @@ a {
   stroke: currentColor !important;
 }
 
-/* ========== CURSOR POINTER FOR ALL BUTTONS ========== */
 button,
 .btn,
 [role="button"],
@@ -1125,7 +1122,6 @@ label[for] {
   stroke: rgb(55 65 81) !important;
 }
 
-/* ========== PRIORITAS TERTINGGI - THEME TOGGLE ICON FIX ========== */
 /* Override semua aturan global untuk theme toggle icons - GELAP di light mode */
 :not(.dark) button[aria-label*="Current theme"] svg,
 :not(.dark) button[aria-label*="Current theme"] path,
@@ -1150,8 +1146,7 @@ label[for] {
   stroke: rgb(55 65 81) !important;
 }
 
-/* ========== THEME TOGGLE SWITCH ICON OVERRIDE - SIMPLE & CLEAN ========== */
-/* Light mode: Sun = YELLOW, Moon = BLUE */
+/* Light mode: Sun = YELLOW, Moon = BLUE, System = PURPLE */
 .theme-toggle-switch .text-yellow-500 {
   color: rgb(234 179 8) !important; /* yellow-500 for sun */
   fill: rgb(234 179 8) !important;
@@ -1162,7 +1157,12 @@ label[for] {
   fill: rgb(59 130 246) !important;
 }
 
-/* Dark mode: Sun = BRIGHTER YELLOW, Moon = LIGHTER BLUE */
+.theme-toggle-switch .text-purple-500 {
+  color: rgb(168 85 247) !important; /* purple-500 for system */
+  fill: rgb(168 85 247) !important;
+}
+
+/* Dark mode: Brighter colors for better contrast */
 .dark .theme-toggle-switch .text-yellow-500 {
   color: rgb(251 191 36) !important; /* yellow-400 for dark mode */
   fill: rgb(251 191 36) !important;
@@ -1171,6 +1171,11 @@ label[for] {
 .dark .theme-toggle-switch .text-gray-400 {
   color: rgb(96 165 250) !important; /* blue-400 for dark mode */
   fill: rgb(96 165 250) !important;
+}
+
+.dark .theme-toggle-switch .text-purple-500 {
+  color: rgb(196 181 253) !important; /* purple-300 for dark mode */
+  fill: rgb(196 181 253) !important;
 } /* Toggle switch icons - Clean and simple */
 .theme-toggle-switch svg {
   color: currentColor !important;
@@ -1214,7 +1219,6 @@ label[for] {
     0 1px 2px rgba(0, 0, 0, 0.1) !important;
 }
 
-/* ========== CURSOR POINTER FOR ALL BUTTONS ========== */
 button,
 .btn,
 [role="button"],

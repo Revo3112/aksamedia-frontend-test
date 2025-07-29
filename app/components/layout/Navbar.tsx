@@ -266,39 +266,70 @@ export function Navbar() {
 
           {/* Right Side */}
           <div className="flex items-center space-x-4">
-            {/* Modern Theme Toggle Switch */}
+            {/* 3-State Theme Toggle Switch (Light → Dark → System) */}
             <div className="relative">
               <button
                 onClick={() => {
-                  const newTheme =
-                    effectiveTheme === "light" ? "dark" : "light";
-                  setTheme(newTheme);
+                  // Cycle through: light → dark → system → light
+                  if (theme === "light") {
+                    setTheme("dark");
+                  } else if (theme === "dark") {
+                    setTheme("system");
+                  } else {
+                    setTheme("light");
+                  }
                 }}
-                className="theme-toggle-switch cursor-pointer"
-                aria-label={`Switch to ${effectiveTheme === "light" ? "dark" : "light"} mode`}
-                title={`Currently ${effectiveTheme} mode. Click to switch to ${effectiveTheme === "light" ? "dark" : "light"} mode`}
+                className="theme-toggle-switch cursor-pointer group"
+                aria-label={`Current: ${theme} mode. Click to cycle to next theme`}
+                title={`Currently ${theme} mode (showing ${effectiveTheme}). Click to cycle: Light → Dark → System`}
               >
-                {/* Toggle Switch Track */}
+                {/* Extended Toggle Switch Track for 3 states */}
                 <div
                   className={`
-                  relative inline-flex h-6 w-11 items-center rounded-full transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800
-                  ${effectiveTheme === "dark" ? "bg-blue-600" : "bg-gray-300"}
+                  relative inline-flex h-6 w-16 items-center rounded-full transition-all duration-300 ease-in-out focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 dark:focus:ring-offset-gray-800 group-hover:scale-105
+                  ${
+                    theme === "system"
+                      ? "bg-gradient-to-r from-gray-400 to-blue-500"
+                      : theme === "dark"
+                        ? "bg-blue-600"
+                        : "bg-gray-300"
+                  }
                 `}
                 >
-                  {/* Toggle Switch Circle */}
+                  {/* Toggle Switch Circle with 3 positions */}
                   <span
                     className={`
-                    inline-block h-4 w-4 transform rounded-full bg-white shadow-lg ring-0 transition-transform duration-200 ease-in-out
+                    inline-block h-4 w-4 transform rounded-full bg-white shadow-lg ring-0 transition-all duration-300 ease-in-out
                     ${
-                      effectiveTheme === "dark"
-                        ? "translate-x-6"
-                        : "translate-x-1"
+                      theme === "system"
+                        ? "translate-x-10"
+                        : theme === "dark"
+                          ? "translate-x-6"
+                          : "translate-x-1"
                     }
                   `}
                   >
-                    {/* Icon inside circle */}
+                    {/* Icon inside circle based on current theme */}
                     <div className="flex h-full w-full items-center justify-center">
-                      {effectiveTheme === "dark" ? (
+                      {theme === "system" ? (
+                        /* System/Auto icon */
+                        <svg
+                          className="h-3 w-3 text-purple-500"
+                          fill="currentColor"
+                          viewBox="0 0 20 20"
+                          aria-hidden="true"
+                          style={{
+                            color: "rgb(168 85 247)",
+                            fill: "rgb(168 85 247)",
+                          }}
+                        >
+                          <path
+                            fillRule="evenodd"
+                            d="M3 4a1 1 0 011-1h12a1 1 0 011 1v2a1 1 0 01-1 1H4a1 1 0 01-1-1V4zm0 4a1 1 0 011-1h12a1 1 0 011 1v6a1 1 0 01-1 1H4a1 1 0 01-1-1V8zm8 1a1 1 0 100 2 1 1 0 000-2z"
+                            clipRule="evenodd"
+                          />
+                        </svg>
+                      ) : theme === "dark" ? (
                         /* Moon icon for dark mode */
                         <svg
                           className="h-3 w-3 text-gray-400"
@@ -306,8 +337,8 @@ export function Navbar() {
                           viewBox="0 0 20 20"
                           aria-hidden="true"
                           style={{
-                            color: "rgb(156 163 175)",
-                            fill: "rgb(156 163 175)",
+                            color: "rgb(96 165 250)",
+                            fill: "rgb(96 165 250)",
                           }}
                         >
                           <path
@@ -337,6 +368,35 @@ export function Navbar() {
                       )}
                     </div>
                   </span>
+
+                  {/* Visual indicators for 3 positions */}
+                  <div className="absolute top-0 left-0 h-full w-full flex justify-between items-center px-1 pointer-events-none">
+                    {/* Light position indicator */}
+                    <div
+                      className={`w-1 h-1 rounded-full transition-opacity duration-200 ${
+                        theme === "light" ? "opacity-0" : "opacity-30"
+                      } bg-yellow-400`}
+                    />
+                    {/* Dark position indicator */}
+                    <div
+                      className={`w-1 h-1 rounded-full transition-opacity duration-200 ${
+                        theme === "dark" ? "opacity-0" : "opacity-30"
+                      } bg-blue-400`}
+                    />
+                    {/* System position indicator */}
+                    <div
+                      className={`w-1 h-1 rounded-full transition-opacity duration-200 ${
+                        theme === "system" ? "opacity-0" : "opacity-30"
+                      } bg-purple-400`}
+                    />
+                  </div>
+                </div>
+
+                {/* Theme status tooltip */}
+                <div className="absolute -bottom-8 left-1/2 transform -translate-x-1/2 opacity-0 group-hover:opacity-100 transition-opacity duration-200 pointer-events-none">
+                  <div className="bg-gray-900 dark:bg-gray-700 text-white text-xs px-2 py-1 rounded whitespace-nowrap">
+                    {theme === "system" ? `System (${effectiveTheme})` : theme}
+                  </div>
                 </div>
               </button>
             </div>
