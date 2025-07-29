@@ -4,10 +4,10 @@ import React, {
   useState,
   useEffect,
   useCallback,
-  type ReactNode
-} from 'react';
-import type { Theme, ThemeState } from '../types';
-import { themeStorage } from '../utils/storage';
+  type ReactNode,
+} from "react";
+import type { Theme, ThemeState } from "../types";
+import { themeStorage } from "../utils/storage";
 
 interface ThemeContextValue extends ThemeState {
   setTheme: (theme: Theme) => void;
@@ -19,90 +19,88 @@ interface ThemeProviderProps {
 }
 
 const ThemeContext = createContext<ThemeContextValue>({
-  theme: 'system',
-  effectiveTheme: 'light',
+  theme: "system",
+  effectiveTheme: "light",
   setTheme: () => {},
   toggleTheme: () => {},
 });
 
 export function ThemeProvider({ children }: ThemeProviderProps) {
-  const [theme, setThemeState] = useState<Theme>('system');
-  const [effectiveTheme, setEffectiveTheme] = useState<'light' | 'dark'>('light');
+  const [theme, setThemeState] = useState<Theme>("system");
+  const [effectiveTheme, setEffectiveTheme] = useState<"light" | "dark">(
+    "light"
+  );
   const [isInitialized, setIsInitialized] = useState(false);
   const [isHydrated, setIsHydrated] = useState(false);
 
   // Calculate effective theme - FIXED untuk override system
-  const calculateEffectiveTheme = useCallback((currentTheme: Theme): 'light' | 'dark' => {
-    if (typeof window === 'undefined') return 'light';
+  const calculateEffectiveTheme = useCallback(
+    (currentTheme: Theme): "light" | "dark" => {
+      if (typeof window === "undefined") return "light";
 
-    if (currentTheme === 'system') {
-      const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
-      return mediaQuery.matches ? 'dark' : 'light';
-    }
-    return currentTheme;
-  }, []);
+      if (currentTheme === "system") {
+        const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+        return mediaQuery.matches ? "dark" : "light";
+      }
+      return currentTheme;
+    },
+    []
+  );
 
   // Apply theme to DOM dengan force override
-  const applyThemeToDOM = useCallback((effective: 'light' | 'dark') => {
-    if (typeof window === 'undefined') return;
+  const applyThemeToDOM = useCallback((effective: "light" | "dark") => {
+    if (typeof window === "undefined") return;
 
     const root = document.documentElement;
 
-    // Hapus semua class terlebih dahulu
-    root.classList.remove('light', 'dark');
-
-    requestAnimationFrame(() => {
-      if (effective === 'dark') {
-        root.classList.add('dark');
-        root.setAttribute('data-theme', 'dark');
-        root.style.colorScheme = 'dark';
-      } else {
-        root.classList.remove('dark');
-        root.setAttribute('data-theme', 'light');
-        root.style.colorScheme = 'light';
-      }
-      root.setAttribute('data-theme-applied', 'true');
-    });
+    // Langsung apply tanpa requestAnimationFrame untuk menghindari timing issues
+    if (effective === "dark") {
+      root.classList.add("dark");
+      root.setAttribute("data-theme", "dark");
+      console.log("Applied dark theme to DOM");
+    } else {
+      root.classList.remove("dark");
+      root.setAttribute("data-theme", "light");
+      console.log("Applied light theme to DOM");
+    }
+    root.setAttribute("data-theme-applied", "true");
   }, []);
 
   // Initialize theme
   useEffect(() => {
-    if (typeof window === 'undefined') return;
+    if (typeof window === "undefined") return;
 
-    const checkInitialization = () => {
-      const root = document.documentElement;
-      const isThemeInitialized = root.getAttribute('data-theme-initialized') === 'true';
+    // Langsung inisialisasi tanpa menunggu flag
+    const storedTheme = themeStorage.getTheme();
+    const calculatedEffective = calculateEffectiveTheme(storedTheme);
 
-      if (isThemeInitialized) {
-        const storedTheme = themeStorage.getTheme();
-        const calculatedEffective = calculateEffectiveTheme(storedTheme);
+    setThemeState(storedTheme);
+    setEffectiveTheme(calculatedEffective);
+    setIsInitialized(true);
 
-        setThemeState(storedTheme);
-        setEffectiveTheme(calculatedEffective);
-        setIsInitialized(true);
-        setIsHydrated(true);
-        applyThemeToDOM(calculatedEffective);
-      } else {
-        setTimeout(checkInitialization, 10);
-      }
-    };
+    // Apply theme immediately
+    applyThemeToDOM(calculatedEffective);
 
-    checkInitialization();
+    // Set hydrated after brief delay
+    setTimeout(() => {
+      setIsHydrated(true);
+    }, 50);
   }, [calculateEffectiveTheme, applyThemeToDOM]);
 
   // Listen for system theme changes
   useEffect(() => {
-    if (!isHydrated || theme !== 'system') return;
+    if (!isHydrated || theme !== "system") return;
 
-    const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
     const handleSystemThemeChange = (e: MediaQueryListEvent) => {
-      const newEffective = e.matches ? 'dark' : 'light';
+      const newEffective = e.matches ? "dark" : "light";
       setEffectiveTheme(newEffective);
       applyThemeToDOM(newEffective);
     };
 
-    mediaQuery.addEventListener('change', handleSystemThemeChange);
-    return () => mediaQuery.removeEventListener('change', handleSystemThemeChange);
+    mediaQuery.addEventListener("change", handleSystemThemeChange);
+    return () =>
+      mediaQuery.removeEventListener("change", handleSystemThemeChange);
   }, [theme, isHydrated, effectiveTheme, applyThemeToDOM]);
 
   // Update effective theme
@@ -114,28 +112,42 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
       setEffectiveTheme(newEffective);
       applyThemeToDOM(newEffective);
     }
-  }, [theme, isInitialized, effectiveTheme, calculateEffectiveTheme, applyThemeToDOM]);
+  }, [
+    theme,
+    isInitialized,
+    effectiveTheme,
+    calculateEffectiveTheme,
+    applyThemeToDOM,
+  ]);
 
-  const setTheme = useCallback((newTheme: Theme) => {
-    setThemeState(newTheme);
-    const newEffective = calculateEffectiveTheme(newTheme);
-    setEffectiveTheme(newEffective);
-    applyThemeToDOM(newEffective);
-    themeStorage.setTheme(newTheme);
-  }, [calculateEffectiveTheme, applyThemeToDOM]);
+  const setTheme = useCallback(
+    (newTheme: Theme) => {
+      console.log("setTheme called with:", newTheme);
+      setThemeState(newTheme);
+      const newEffective = calculateEffectiveTheme(newTheme);
+      console.log("Calculated effective theme:", newEffective);
+      setEffectiveTheme(newEffective);
+      applyThemeToDOM(newEffective);
+      themeStorage.setTheme(newTheme);
+    },
+    [calculateEffectiveTheme, applyThemeToDOM]
+  );
 
   // FIXED: Enhanced toggle yang benar-benar override system
   const toggleTheme = useCallback(() => {
-    if (theme === 'system') {
+    console.log("toggleTheme called, current:", theme, effectiveTheme);
+    if (theme === "system") {
       // Saat system mode, force manual toggle
-      const systemIsDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
-      setTheme(systemIsDark ? 'light' : 'dark');
-    } else if (theme === 'light') {
-      setTheme('dark');
+      const systemIsDark = window.matchMedia(
+        "(prefers-color-scheme: dark)"
+      ).matches;
+      setTheme(systemIsDark ? "light" : "dark");
+    } else if (theme === "light") {
+      setTheme("dark");
     } else {
-      setTheme('light');
+      setTheme("light");
     }
-  }, [theme, setTheme]);
+  }, [theme, effectiveTheme, setTheme]);
 
   const value: ThemeContextValue = {
     theme,
@@ -144,13 +156,18 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
     toggleTheme,
   };
 
-  if (!isHydrated) {
-    return null;
-  }
-
+  // Remove the blocking condition to fix hydration mismatch
   return (
     <ThemeContext.Provider value={value}>
-      {children}
+      <div
+        className={
+          !isHydrated
+            ? "opacity-0"
+            : "opacity-100 transition-opacity duration-300"
+        }
+      >
+        {children}
+      </div>
     </ThemeContext.Provider>
   );
 }
@@ -158,7 +175,7 @@ export function ThemeProvider({ children }: ThemeProviderProps) {
 export const useTheme = () => {
   const context = useContext(ThemeContext);
   if (!context) {
-    throw new Error('useTheme must be used within a ThemeProvider');
+    throw new Error("useTheme must be used within a ThemeProvider");
   }
   return context;
 };
