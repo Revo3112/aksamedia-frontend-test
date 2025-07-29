@@ -37,11 +37,97 @@
                       box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Root theme setup with enhanced initialization */
+/* =========================================
+   THEME OVERRIDE FIX - PRIORITY UTAMA
+   ========================================= */
+
+/* Force manual theme override */
 :root {
   color-scheme: light;
-  --theme-transition-duration: 300ms;
+  --theme-transition-duration: 0ms;
 }
+
+/* Background utama yang pasti berubah */
+html {
+  transition: none !important;
+}
+
+body {
+  background-color: rgb(249 250 251) !important;
+  transition: background-color 0ms !important;
+}
+
+/* Dark mode force - PRIORITY TINGGI */
+html[data-theme="dark"],
+html.dark {
+  color-scheme: dark !important;
+}
+
+html[data-theme="dark"] body,
+html.dark body {
+  background-color: rgb(17 24 39) !important;
+}
+
+/* Component background override */
+[data-theme="dark"] .bg-white,
+html[data-theme="dark"] .bg-white,
+html.dark .bg-white {
+  background-color: rgb(31 41 55) !important;
+}
+
+[data-theme="dark"] .bg-gray-50,
+html[data-theme="dark"] .bg-gray-50,
+html.dark .bg-gray-50 {
+  background-color: rgb(17 24 39) !important;
+}
+
+[data-theme="dark"] .bg-gray-100,
+html[data-theme="dark"] .bg-gray-100,
+html.dark .bg-gray-100 {
+  background-color: rgb(31 41 55) !important;
+}
+
+[data-theme="dark"] .bg-gray-200,
+html[data-theme="dark"] .bg-gray-200,
+html.dark .bg-gray-200 {
+  background-color: rgb(55 65 81) !important;
+}
+
+/* Text color override */
+[data-theme="dark"] .text-gray-900,
+html[data-theme="dark"] .text-gray-900,
+html.dark .text-gray-900 {
+  color: rgb(249 250 251) !important;
+}
+
+[data-theme="dark"] .text-gray-700,
+html[data-theme="dark"] .text-gray-700,
+html.dark .text-gray-700 {
+  color: rgb(209 213 219) !important;
+}
+
+[data-theme="dark"] .text-gray-500,
+html[data-theme="dark"] .text-gray-500,
+html.dark .text-gray-500 {
+  color: rgb(156 163 175) !important;
+}
+
+/* Border color override */
+[data-theme="dark"] .border-gray-200,
+html[data-theme="dark"] .border-gray-200,
+html.dark .border-gray-200 {
+  border-color: rgb(75 85 99) !important;
+}
+
+[data-theme="dark"] .border-gray-300,
+html[data-theme="dark"] .border-gray-300,
+html.dark .border-gray-300 {
+  border-color: rgb(55 65 81) !important;
+}
+
+/* =========================================
+   ORIGINAL THEME SETUP
+   ========================================= */
 
 [data-theme="dark"] {
   color-scheme: dark;
@@ -57,53 +143,35 @@
   }
 }
 
-/* Enhanced body styling with smooth transitions */
+/* Enhanced body styling */
 html {
   scroll-behavior: smooth;
-  /* Prevent flash during theme initialization */
-  transition: background-color var(--theme-transition-duration) ease-out;
-}
-
-/* Prevent flash of unstyled content during theme initialization */
-html:not([data-theme-initialized]) {
-  visibility: hidden;
-}
-
-html[data-theme-initialized] {
-  visibility: visible;
 }
 
 body {
   font-family: var(--font-family-sans);
-  transition: var(--transition-theme);
-  /* Prevent layout shift during theme transitions */
   min-height: 100vh;
-  /* Smooth background transition */
-  background-color: rgb(249 250 251);
 }
 
-html.dark body {
-  background-color: rgb(17 24 39);
-}
-
-/* Enhanced scrollbar with theme support */
+/* Enhanced scrollbar */
 ::-webkit-scrollbar {
   width: 8px;
   height: 8px;
 }
 
 ::-webkit-scrollbar-track {
-  @apply bg-gray-100 dark:bg-gray-800;
-  transition: var(--transition-theme);
+  background-color: rgb(243 244 246);
+}
+html.dark ::-webkit-scrollbar-track {
+  background-color: rgb(31 41 55);
 }
 
 ::-webkit-scrollbar-thumb {
-  @apply bg-gray-300 dark:bg-gray-600 rounded-full;
-  transition: var(--transition-theme);
+  background-color: rgb(209 213 219);
+  border-radius: 9999px;
 }
-
-::-webkit-scrollbar-thumb:hover {
-  @apply bg-gray-400 dark:bg-gray-500;
+html.dark ::-webkit-scrollbar-thumb {
+  background-color: rgb(75 85 99);
 }
 
 /* Firefox scrollbar */
@@ -111,12 +179,11 @@ html.dark body {
   scrollbar-width: thin;
   scrollbar-color: rgb(209 213 219) rgb(243 244 246);
 }
-
 html.dark * {
   scrollbar-color: rgb(75 85 99) rgb(31 41 55);
 }
 
-/* Enhanced smooth theme transition for ALL elements */
+/* ALL elements theme transition */
 *,
 *::before,
 *::after {
@@ -125,400 +192,41 @@ html.dark * {
   transition-duration: var(--theme-transition-duration);
 }
 
-/* Specific transitions for interactive elements */
+/* Interactive elements faster transition */
 button, input, select, textarea, a {
-  transition-property: background-color, border-color, color, fill, stroke, opacity, box-shadow, transform, text-shadow;
-  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
   transition-duration: 200ms;
 }
 
-/* Theme toggle specific animations */
+/* Theme toggle button */
 .theme-toggle-button {
   position: relative;
   overflow: hidden;
-  transition: all 300ms cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.theme-toggle-button::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(59, 130, 246, 0.1), transparent);
-  transition: left 500ms ease-out;
-}
-
-.theme-toggle-button:hover::before {
-  left: 100%;
 }
 
 .theme-toggle-button:hover {
   transform: scale(1.05);
-  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.2);
 }
 
-.dark .theme-toggle-button:hover {
-  box-shadow: 0 4px 12px rgba(96, 165, 250, 0.2);
-}
-
-/* Animation utilities */
-@keyframes fadeIn {
-  from { opacity: 0; }
-  to { opacity: 1; }
-}
-
-@keyframes slideIn {
-  from {
-    opacity: 0;
-    transform: translateY(-10px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-@keyframes pulse {
-  0%, 100% { opacity: 1; }
-  50% { opacity: 0.7; }
-}
-
-@keyframes themeChange {
-  0% { opacity: 0.8; }
-  50% { opacity: 1; }
-  100% { opacity: 0.8; }
-}
-
-/* Theme transition effect for the entire page */
-.theme-transitioning * {
-  transition-duration: 300ms !important;
-}
-
-/* Enhanced focus styles for accessibility */
-.focus-visible:focus {
-  outline: 2px solid rgb(59 130 246);
-  outline-offset: 2px;
-  transition: outline-color 200ms ease-out;
-}
-
-.dark .focus-visible:focus {
-  outline-color: rgb(96 165 250);
-}
-
-/* Reduce motion for users who prefer it */
-@media (prefers-reduced-motion: reduce) {
-  *,
-  *::before,
-  *::after {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-    scroll-behavior: auto !important;
-  }
-
-  html {
-    --theme-transition-duration: 0ms;
-  }
-}
-
-/* Custom loading animation */
-.loading-dots {
-  display: inline-flex;
-  gap: 4px;
-}
-
-.loading-dots span {
-  width: 4px;
-  height: 4px;
-  border-radius: 50%;
-  background-color: currentColor;
-  animation: loading-dots 1.4s ease-in-out infinite both;
-}
-
-.loading-dots span:nth-child(1) { animation-delay: -0.32s; }
-.loading-dots span:nth-child(2) { animation-delay: -0.16s; }
-.loading-dots span:nth-child(3) { animation-delay: 0; }
-
-@keyframes loading-dots {
-  0%, 80%, 100% {
-    transform: scale(0);
-  }
-  40% {
-    transform: scale(1);
-  }
-}
-
-/* Enhanced table styling with theme support */
-.table-container {
-  @apply bg-white dark:bg-gray-800 shadow-sm rounded-lg overflow-hidden;
-  transition: var(--transition-theme);
-}
-
-.table-container table {
-  @apply min-w-full divide-y divide-gray-200 dark:divide-gray-700;
-}
-
-.table-container thead {
-  @apply bg-gray-50 dark:bg-gray-900;
-  transition: var(--transition-theme);
-}
-
-.table-container tbody {
-  @apply divide-y divide-gray-200 dark:divide-gray-700;
-}
-
-.table-container tbody tr {
-  transition: var(--transition-theme);
-}
-
-.table-container tbody tr:hover {
-  @apply bg-gray-50 dark:bg-gray-700;
-}
-
-/* Enhanced modal backdrop with theme support */
-.modal-backdrop {
-  backdrop-filter: blur(4px);
-  animation: fadeIn 0.2s ease-out;
-  transition: var(--transition-theme);
-}
-
-/* Enhanced dropdown animations with theme support */
-.dropdown-enter {
-  opacity: 0;
-  transform: scale(0.95) translateY(-10px);
-}
-
-.dropdown-enter-active {
-  opacity: 1;
-  transform: scale(1) translateY(0);
-  transition: opacity 150ms ease-out, transform 150ms ease-out;
-}
-
-.dropdown-exit {
-  opacity: 1;
-  transform: scale(1) translateY(0);
-}
-
-.dropdown-exit-active {
-  opacity: 0;
-  transform: scale(0.95) translateY(-10px);
-  transition: opacity 150ms ease-in, transform 150ms ease-in;
-}
-
-/* Enhanced button hover effects with theme support */
-.btn-primary {
-  position: relative;
-  overflow: hidden;
-  transition: var(--transition-theme);
-}
-
-.btn-primary::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
-  transition: left 0.5s;
-}
-
-.btn-primary:hover::before {
-  left: 100%;
-}
-
-/* Theme indicators and visual feedback */
-.theme-indicator {
-  position: relative;
-  display: inline-block;
-}
-
-.theme-indicator::after {
-  content: '';
-  position: absolute;
-  bottom: -2px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 6px;
-  height: 2px;
-  border-radius: 1px;
-  background-color: currentColor;
-  opacity: 0;
-  transition: opacity 300ms ease-out;
-}
-
-.theme-indicator.active::after {
-  opacity: 1;
-}
-
-/* Theme-aware selection styles */
+/* Theme-aware selection */
 ::selection {
   background-color: rgb(59 130 246 / 0.2);
-  color: inherit;
 }
-
 .dark ::selection {
   background-color: rgb(96 165 250 / 0.3);
 }
 
-/* Enhanced navbar theme transitions */
-.navbar {
-  transition: var(--transition-theme);
-  border-bottom: 1px solid rgb(229 231 235);
-}
-
-.dark .navbar {
-  border-bottom-color: rgb(75 85 99);
-}
-
-/* Theme-aware input styles */
-input, textarea, select {
-  transition: var(--transition-theme);
-}
-
-input:focus, textarea:focus, select:focus {
-  outline: 2px solid rgb(59 130 246);
-  outline-offset: 2px;
-}
-
-.dark input:focus, .dark textarea:focus, .dark select:focus {
-  outline-color: rgb(96 165 250);
-}
-
-/* Enhanced card styling with theme support */
-.card {
-  @apply bg-white dark:bg-gray-800 shadow-sm rounded-lg;
-  transition: var(--transition-theme), transform 200ms ease-out;
-}
-
-.card:hover {
-  transform: translateY(-2px);
-  @apply shadow-md;
-}
-
-/* Theme-aware skeleton loading */
-.skeleton {
-  background: linear-gradient(90deg,
-    rgb(229 231 235) 25%,
-    rgb(243 244 246) 50%,
-    rgb(229 231 235) 75%
-  );
-  background-size: 200% 100%;
-  animation: skeleton-loading 2s infinite;
-}
-
-.dark .skeleton {
-  background: linear-gradient(90deg,
-    rgb(75 85 99) 25%,
-    rgb(107 114 128) 50%,
-    rgb(75 85 99) 75%
-  );
-  background-size: 200% 100%;
-}
-
-@keyframes skeleton-loading {
-  0% { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-
-/* Theme transition classes for programmatic control */
-.theme-transition-fast * {
-  transition-duration: 150ms !important;
-}
-
-.theme-transition-slow * {
-  transition-duration: 500ms !important;
-}
-
-.theme-no-transition * {
-  transition: none !important;
-}
-
-/* Print styles with theme awareness */
-@media print {
-  * {
-    background: white !important;
-    color: black !important;
-    box-shadow: none !important;
-    text-shadow: none !important;
-  }
-
-  .no-print {
-    display: none !important;
-  }
-
-  .print-dark {
-    background: black !important;
-    color: white !important;
-  }
-}
-
-/* High contrast mode support */
+/* High contrast mode */
 @media (prefers-contrast: high) {
   :root {
     --shadow: 0 2px 4px 0 rgb(0 0 0 / 0.4);
     --shadow-md: 0 4px 8px 0 rgb(0 0 0 / 0.4);
     --shadow-lg: 0 8px 16px 0 rgb(0 0 0 / 0.4);
   }
-
-  button, input, select, textarea {
-    border-width: 2px !important;
-  }
-
-  .focus-visible:focus {
-    outline-width: 3px !important;
-  }
 }
 
-/* Custom properties for theme-aware components */
-:root {
-  --navbar-height: 4rem;
-  --sidebar-width: 16rem;
-  --content-max-width: 80rem;
-}
-
-/* Responsive theme adjustments */
+/* Responsive adjustments */
 @media (max-width: 640px) {
   .theme-toggle-button {
     transform: scale(0.9);
   }
-
-  .dropdown-menu {
-    max-width: calc(100vw - 2rem);
-  }
-}
-
-/* Performance optimizations */
-.gpu-accelerated {
-  transform: translateZ(0);
-  will-change: transform;
-}
-
-/* Theme-aware focus rings */
-.focus-ring {
-  @apply focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2;
-  transition: box-shadow 200ms ease-out;
-}
-
-.dark .focus-ring {
-  @apply dark:focus:ring-blue-400 dark:focus:ring-offset-gray-800;
-}
-
-/* Utility classes for theme transitions */
-.transition-theme {
-  transition: var(--transition-theme);
-}
-
-.transition-theme-fast {
-  transition: background-color 150ms ease-out,
-              color 150ms ease-out,
-              border-color 150ms ease-out;
-}
-
-.transition-theme-slow {
-  transition: background-color 500ms ease-out,
-              color 500ms ease-out,
-              border-color 500ms ease-out;
 }

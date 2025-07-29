@@ -133,7 +133,6 @@ export function Navbar() {
                 d="M9.75 17L9 20l-1 1h8l-1-1-.75-3M3 13h18M5 17h14a2 2 0 002-2V5a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"
               />
             </svg>
-            {/* Animated indicator dot showing the actual effective theme */}
             <div
               className={`
                 absolute -bottom-0.5 -right-0.5 w-2 h-2 rounded-full transition-all duration-300 transform
@@ -216,15 +215,12 @@ export function Navbar() {
               />
             </div>
 
-            {/* Quick theme toggle button (optional - for power users) */}
+            {/* Quick theme toggle button (FIXED) */}
             <button
               onClick={() => {
-                // Quick toggle between light and dark (bypassing system)
-                if (effectiveTheme === 'light') {
-                  setTheme('dark');
-                } else {
-                  setTheme('light');
-                }
+                // Force theme override regardless of system
+                const newTheme = effectiveTheme === 'light' ? 'dark' : 'light';
+                setTheme(newTheme);
               }}
               className="hidden md:flex p-1.5 rounded-md text-gray-400 hover:text-gray-600 dark:hover:text-gray-300 transition-all duration-200 hover:bg-gray-100 dark:hover:bg-gray-700"
               title="Quick toggle light/dark"
