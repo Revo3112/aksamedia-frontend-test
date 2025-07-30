@@ -9,7 +9,7 @@ import type {
 } from "../types";
 
 export const API_BASE_URL =
-  import.meta.env.VITE_API_BASE_URL || "http://localhost:8000/api";
+  import.meta.env.VITE_API_BASE_URL || "http://0.0.0.0:8080/api";
 
 // Storage utilities
 export const tokenStorage = {
