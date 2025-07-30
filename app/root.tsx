@@ -67,6 +67,24 @@ const themeScript = `
 `;
 
 /* App Layout with theme synchronization */
+// ConditionalCrudProvider - Only render CrudProvider when authenticated
+function ConditionalCrudProvider({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated, isLoading } = useAuth();
+
+  // Don't render CrudProvider until we know auth status
+  if (isLoading) {
+    return <>{children}</>;
+  }
+
+  // Only render CrudProvider if user is authenticated
+  if (isAuthenticated) {
+    return <CrudProvider>{children}</CrudProvider>;
+  }
+
+  // For non-authenticated users, just render children directly
+  return <>{children}</>;
+}
+
 function AppLayout({ children }: { children: React.ReactNode }) {
   const { isAuthenticated } = useAuth();
 
@@ -186,9 +204,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <body className="antialiased bg-gray-50 dark:bg-gray-900 h-full transition-colors">
         <ThemeProvider>
           <AuthProvider>
-            <CrudProvider>
+            <ConditionalCrudProvider>
               <AppLayout>{children}</AppLayout>
-            </CrudProvider>
+            </ConditionalCrudProvider>
           </AuthProvider>
         </ThemeProvider>
         <ScrollRestoration />

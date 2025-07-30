@@ -1,37 +1,45 @@
-import React, { useEffect, useRef, useState } from 'react';
-import type { DropdownItem } from '../../types';
+import React, { useEffect, useRef, useState } from "react";
+import type { DropdownItem } from "~/types";
 
 interface DropdownProps {
   trigger: React.ReactNode;
   items: DropdownItem[];
-  align?: 'left' | 'right';
+  align?: "left" | "right";
   className?: string;
 }
 
-export function Dropdown({ trigger, items, align = 'right', className = '' }: DropdownProps) {
+export function Dropdown({
+  trigger,
+  items,
+  align = "right",
+  className = "",
+}: DropdownProps) {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null); // Fixed: Added initial value
   const timeoutRef = useRef<NodeJS.Timeout | null>(null); // Fixed: Added proper typing
 
   useEffect(() => {
     function handleClickOutside(event: MouseEvent) {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     }
 
     function handleEscape(event: KeyboardEvent) {
-      if (event.key === 'Escape') {
+      if (event.key === "Escape") {
         setIsOpen(false);
       }
     }
 
     if (isOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-      document.addEventListener('keydown', handleEscape);
+      document.addEventListener("mousedown", handleClickOutside);
+      document.addEventListener("keydown", handleEscape);
       return () => {
-        document.removeEventListener('mousedown', handleClickOutside);
-        document.removeEventListener('keydown', handleEscape);
+        document.removeEventListener("mousedown", handleClickOutside);
+        document.removeEventListener("keydown", handleEscape);
       };
     }
   }, [isOpen]);
@@ -58,14 +66,17 @@ export function Dropdown({ trigger, items, align = 'right', className = '' }: Dr
   }, []);
 
   return (
-    <div className={`relative inline-block text-left ${className}`} ref={dropdownRef}>
+    <div
+      className={`relative inline-block text-left ${className}`}
+      ref={dropdownRef}
+    >
       <div
         className="cursor-pointer"
         onClick={() => setIsOpen(!isOpen)}
         role="button"
         tabIndex={0}
         onKeyDown={(e) => {
-          if (e.key === 'Enter' || e.key === ' ') {
+          if (e.key === "Enter" || e.key === " ") {
             e.preventDefault();
             setIsOpen(!isOpen);
           }
@@ -77,7 +88,10 @@ export function Dropdown({ trigger, items, align = 'right', className = '' }: Dr
       {isOpen && (
         <>
           {/* Backdrop for mobile */}
-          <div className="fixed inset-0 z-40 sm:hidden" onClick={() => setIsOpen(false)} />
+          <div
+            className="fixed inset-0 z-40 sm:hidden"
+            onClick={() => setIsOpen(false)}
+          />
 
           {/* Dropdown menu */}
           <div
@@ -89,23 +103,28 @@ export function Dropdown({ trigger, items, align = 'right', className = '' }: Dr
               focus:outline-none
               transform transition-all duration-200 ease-out
               origin-top-right scale-100 opacity-100
-              ${align === 'right' ? 'right-0' : 'left-0'}
+              ${align === "right" ? "right-0" : "left-0"}
             `}
             role="menu"
             aria-orientation="vertical"
             aria-labelledby="menu-button"
+            style={{
+              backgroundColor: "var(--dropdown-bg)",
+              borderColor: "var(--dropdown-border)",
+            }}
           >
             <div className="py-1" role="none">
               {items.map((item, index) => (
                 <button
                   key={index}
                   className={`
-                    group flex items-center px-4 py-3 text-sm w-full text-left
+                    dropdown-item group flex items-center px-4 py-3 text-sm w-full text-left
                     transition-all duration-150 ease-in-out
                     focus:outline-none focus:ring-2 focus:ring-inset focus:ring-blue-500
-                    ${item.danger
-                      ? 'text-red-700 hover:bg-red-50 hover:text-red-900 dark:text-red-400 dark:hover:bg-red-900/30 dark:hover:text-red-300'
-                      : 'text-gray-700 hover:bg-gray-50 hover:text-gray-900 dark:text-gray-300 dark:hover:bg-gray-700/50 dark:hover:text-gray-100'
+                    ${
+                      item.danger
+                        ? "dropdown-danger text-red-700 hover:text-red-900 dark:text-red-300 dark:hover:text-red-200"
+                        : "dropdown-normal text-gray-700 hover:text-gray-900 dark:text-gray-300 dark:hover:text-gray-100"
                     }
                     active:scale-95
                   `}
@@ -113,17 +132,17 @@ export function Dropdown({ trigger, items, align = 'right', className = '' }: Dr
                   onClick={() => handleItemClick(item)}
                 >
                   {item.icon && (
-                    <span className={`mr-3 flex-shrink-0 transition-colors duration-150 ${
-                      item.danger
-                        ? 'text-red-500 group-hover:text-red-600 dark:text-red-400 dark:group-hover:text-red-300'
-                        : 'text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-400'
-                    }`}>
+                    <span
+                      className={`mr-3 flex-shrink-0 transition-colors duration-150 ${
+                        item.danger
+                          ? "text-red-500 group-hover:text-red-600 dark:text-red-300 dark:group-hover:text-red-200"
+                          : "text-gray-400 group-hover:text-gray-500 dark:text-gray-500 dark:group-hover:text-gray-400"
+                      }`}
+                    >
                       {item.icon}
                     </span>
                   )}
-                  <span className="flex-1">
-                    {item.label}
-                  </span>
+                  <span className="flex-1">{item.label}</span>
                 </button>
               ))}
             </div>

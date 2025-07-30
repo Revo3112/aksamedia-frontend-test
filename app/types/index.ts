@@ -1,6 +1,6 @@
 // API Response types
 export interface ApiResponse<T = any> {
-  status: 'success' | 'error';
+  status: "success" | "error";
   message: string;
   data?: T;
 }
@@ -67,14 +67,15 @@ export interface EmployeeFormData {
 export interface CrudItem {
   id: string;
   name: string;
-  email?: string;
   phone: string;
   position: string;
-  department: string;
-  division_id: string;
+  division: {
+    id: string;
+    name: string;
+  };
   image?: string;
-  createdAt: string;
-  updatedAt: string;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface Division {
@@ -99,11 +100,11 @@ export interface AuthState {
   user: User | null;
 }
 
-export type Theme = 'light' | 'dark' | 'system';
+export type Theme = "light" | "dark" | "system";
 
 export interface ThemeState {
   theme: Theme;
-  effectiveTheme: 'light' | 'dark';
+  effectiveTheme: "light" | "dark";
 }
 
 export interface ModalProps {
