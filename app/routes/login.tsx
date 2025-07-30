@@ -178,7 +178,7 @@ export default function Login() {
             </h3>
             <div className="text-xs text-blue-700 dark:text-blue-300 space-y-1">
               <div><strong>Username:</strong> admin</div>
-              <div><strong>Password:</strong> password123</div>
+              <div><strong>Password:</strong> pastibisa</div>
             </div>
           </div>
         </form>

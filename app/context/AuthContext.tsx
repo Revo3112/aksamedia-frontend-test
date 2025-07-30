@@ -1,73 +1,94 @@
+// context/AuthContext.tsx - Complete Laravel API integration
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import type { User, AuthState } from '../types';
-import { authStorage } from '../utils/storage';
-
-const VALID_CREDENTIALS = {
-  username: 'admin',
-  password: 'password123',
-  fullName: 'Administrator'
-};
+import { apiClient, transformApiUserToUser, handleApiError, tokenStorage } from '../utils/api';
 
 interface AuthContextValue extends AuthState {
-  login: (username: string, password: string) => Promise<boolean>;
-  logout: () => void;
+  login: (username: string, password: string) => Promise<{ success: boolean; error?: string }>;
+  logout: () => Promise<void>;
   updateUser: (updates: Partial<User>) => void;
+  isLoading: boolean;
 }
 
 const AuthContext = createContext<AuthContextValue>({
   isAuthenticated: false,
   user: null,
-  login: async () => false,
-  logout: () => {},
+  login: async () => ({ success: false }),
+  logout: async () => {},
   updateUser: () => {},
+  isLoading: true,
 });
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const [authState, setAuthState] = useState<AuthState>(() => {
-    // Initialize from storage if available
-    if (typeof window !== 'undefined') {
-      const { isAuthenticated, user } = authStorage.getAuthData();
-      return { isAuthenticated, user };
-    }
-    return { isAuthenticated: false, user: null };
+  const [authState, setAuthState] = useState<AuthState>({
+    isAuthenticated: false,
+    user: null,
   });
+  const [isLoading, setIsLoading] = useState(true);
 
-  // Sync with storage on mount
   useEffect(() => {
-    if (typeof window !== 'undefined') {
-      const { isAuthenticated, user } = authStorage.getAuthData();
-      setAuthState({ isAuthenticated, user });
-    }
+    const initializeAuth = () => {
+      const token = tokenStorage.getToken();
+      const userData = localStorage.getItem('user_data');
+
+      if (token && userData) {
+        try {
+          const user = JSON.parse(userData);
+          setAuthState({ isAuthenticated: true, user });
+        } catch {
+          tokenStorage.removeToken();
+          localStorage.removeItem('user_data');
+        }
+      }
+      setIsLoading(false);
+    };
+
+    initializeAuth();
   }, []);
 
-  const login = async (username: string, password: string): Promise<boolean> => {
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 300));
+  const login = async (username: string, password: string): Promise<{ success: boolean; error?: string }> => {
+    try {
+      setIsLoading(true);
 
-    if (username === VALID_CREDENTIALS.username && password === VALID_CREDENTIALS.password) {
-      const user: User = {
-        id: '1',
-        username,
-        fullName: VALID_CREDENTIALS.fullName
-      };
+      const response = await apiClient.login(username, password);
 
-      authStorage.setAuthData(user);
-      setAuthState({ isAuthenticated: true, user });
-      return true;
+      if (response.status === 'success' && response.data) {
+        const { token, admin } = response.data;
+        const user = transformApiUserToUser(admin);
+
+        tokenStorage.setToken(token);
+        localStorage.setItem('user_data', JSON.stringify(user));
+
+        setAuthState({ isAuthenticated: true, user });
+
+        return { success: true };
+      } else {
+        return { success: false, error: response.message || 'Login failed' };
+      }
+    } catch (error) {
+      const errorMessage = handleApiError(error);
+      return { success: false, error: errorMessage };
+    } finally {
+      setIsLoading(false);
     }
-    return false;
   };
 
-  const logout = () => {
-    authStorage.clearAuthData();
-    setAuthState({ isAuthenticated: false, user: null });
+  const logout = async (): Promise<void> => {
+    try {
+      await apiClient.logout().catch(console.error);
+    } catch (error) {
+      console.error('Logout API error:', error);
+    } finally {
+      tokenStorage.removeToken();
+      localStorage.removeItem('user_data');
+      setAuthState({ isAuthenticated: false, user: null });
+    }
   };
 
   const updateUser = (updates: Partial<User>) => {
     if (!authState.user) return;
-
     const updatedUser = { ...authState.user, ...updates };
-    authStorage.updateUserData(updatedUser);
+    localStorage.setItem('user_data', JSON.stringify(updatedUser));
     setAuthState({ isAuthenticated: true, user: updatedUser });
   };
 
@@ -76,6 +97,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     login,
     logout,
     updateUser,
+    isLoading,
   };
 
   return (
