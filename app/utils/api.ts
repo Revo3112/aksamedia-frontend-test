@@ -8,6 +8,7 @@ import type {
   CrudItem,
 } from "../types";
 
+// Hardcode for backup
 export const API_BASE_URL =
   import.meta.env.VITE_API_BASE_URL || "https://aksamedia-backend-akdjc.sevalla.app/api";
 
