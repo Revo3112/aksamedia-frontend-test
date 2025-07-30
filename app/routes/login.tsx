@@ -62,7 +62,6 @@ export default function Login() {
 
     try {
       const success = await login(formData.username, formData.password);
-      console.log("SUCESS JANCUK:", success);
 
       if (success) {
         navigate("/", { replace: true });
