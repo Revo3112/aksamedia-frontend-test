@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from "react";
+import React, { useState } from "react";
 import { useCrud } from "../../context/CrudContext";
 import { Button } from "../ui/Button";
 import { Input } from "../ui/Input";
@@ -13,8 +13,9 @@ export function CrudTable() {
     divisions,
     searchQuery,
     currentPage,
-    itemsPerPage,
     isLoading,
+    error,
+    paginationInfo,
     setSearchQuery,
     setCurrentPage,
     addItem,
@@ -32,22 +33,6 @@ export function CrudTable() {
     position: "",
     division: "",
   });
-
-  /* ---------- Search & pagination ---------- */
-  const filtered = useMemo(() => {
-    const q = searchQuery.toLowerCase();
-    return items.filter(
-      (i) =>
-        i.name.toLowerCase().includes(q) ||
-        i.phone.toLowerCase().includes(q) ||
-        i.position.toLowerCase().includes(q) ||
-        i.division.name.toLowerCase().includes(q)
-    );
-  }, [items, searchQuery]);
-
-  const totalPages = Math.ceil(filtered.length / itemsPerPage);
-  const startIdx = (currentPage - 1) * itemsPerPage;
-  const paginated = filtered.slice(startIdx, startIdx + itemsPerPage);
 
   /* ---------- Modal helpers ---------- */
   const openModal = (item?: CrudItem) => {
@@ -70,13 +55,30 @@ export function CrudTable() {
     setEditing(null);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!form.name || !form.phone || !form.division || !form.position) {
       alert("All fields are required");
       return;
     }
-    editing ? updateItem(editing.id, form) : addItem(form);
-    closeModal();
+
+    const result = editing
+      ? await updateItem(editing.id, form)
+      : await addItem(form);
+
+    if (result.success) {
+      closeModal();
+    } else {
+      alert(result.error || "Operation failed");
+    }
+  };
+
+  const handleDelete = async (id: string) => {
+    if (confirm("Are you sure you want to delete this employee?")) {
+      const result = await deleteItem(id);
+      if (!result.success) {
+        alert(result.error || "Delete failed");
+      }
+    }
   };
 
   return (
@@ -98,81 +100,125 @@ export function CrudTable() {
         />
       </div>
 
+      {/* Error Display */}
+      {error && (
+        <div className="bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-md p-4">
+          <div className="flex">
+            <div className="flex-shrink-0">
+              <svg className="h-5 w-5 text-red-400" viewBox="0 0 20 20" fill="currentColor">
+                <path fillRule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clipRule="evenodd" />
+              </svg>
+            </div>
+            <div className="ml-3">
+              <p className="text-sm text-red-700 dark:text-red-400">{error}</p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* Table */}
-      <div className="bg-white dark:bg-gray-800 shadow rounded-lg overflow-x-auto">
-        <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
-          <thead className="bg-gray-50 dark:bg-gray-900">
-            <tr>
-              <th className="px-4 py-2 text-left text-sm font-medium">Name</th>
-              <th className="px-4 py-2 text-left text-sm font-medium">Phone</th>
-              <th className="px-4 py-2 text-left text-sm font-medium">
-                Position
-              </th>
-              <th className="px-4 py-2 text-left text-sm font-medium">
-                Division
-              </th>
-              <th className="px-4 py-2 text-right text-sm font-medium">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="divide-y divide-gray-200 dark:divide-gray-700">
-            {isLoading ? (
+      <div className="bg-white dark:bg-gray-800 shadow rounded-lg overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
+            <thead className="bg-gray-50 dark:bg-gray-900">
               <tr>
-                <td colSpan={5} className="text-center py-6 text-gray-500">
-                  Loading…
-                </td>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  Name
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  Phone
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  Position
+                </th>
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  Division
+                </th>
+                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                  Actions
+                </th>
               </tr>
-            ) : paginated.length === 0 ? (
-              <tr>
-                <td colSpan={5} className="text-center py-6 text-gray-500">
-                  No data found.
-                </td>
-              </tr>
-            ) : (
-              paginated.map((item) => (
-                <tr
-                  key={item.id}
-                  className="hover:bg-gray-50 dark:hover:bg-gray-700"
-                >
-                  <td className="px-4 py-2">{item.name}</td>
-                  <td className="px-4 py-2">{item.phone}</td>
-                  <td className="px-4 py-2">{item.position}</td>
-                  <td className="px-4 py-2">{item.division.name}</td>
-                  <td className="px-4 py-2 text-right space-x-2">
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      onClick={() => openModal(item)}
-                    >
-                      Edit
-                    </Button>
-                    <Button
-                      variant="danger"
-                      size="sm"
-                      onClick={() => deleteItem(item.id)}
-                    >
-                      Delete
-                    </Button>
+            </thead>
+            <tbody className="bg-white dark:bg-gray-800 divide-y divide-gray-200 dark:divide-gray-700">
+              {isLoading ? (
+                <tr>
+                  <td colSpan={5} className="px-4 py-8 text-center">
+                    <div className="flex items-center justify-center">
+                      <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
+                      <span className="ml-2 text-gray-500 dark:text-gray-400">Loading...</span>
+                    </div>
                   </td>
                 </tr>
-              ))
-            )}
-          </tbody>
-        </table>
+              ) : items.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="px-4 py-8 text-center">
+                    <div className="text-gray-500 dark:text-gray-400">
+                      <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
+                      </svg>
+                      <h3 className="mt-2 text-sm font-medium">No employees found</h3>
+                      <p className="mt-1 text-sm text-gray-400">
+                        {searchQuery ? "Try adjusting your search terms." : "Get started by adding a new employee."}
+                      </p>
+                    </div>
+                  </td>
+                </tr>
+              ) : (
+                items.map((item) => (
+                  <tr
+                    key={item.id}
+                    className="hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+                  >
+                    <td className="px-4 py-4 whitespace-nowrap">
+                      <div className="text-sm font-medium text-gray-900 dark:text-white">
+                        {item.name}
+                      </div>
+                    </td>
+                    <td className="px-4 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                        {item.phone}
+                      </div>
+                    </td>
+                    <td className="px-4 py-4 whitespace-nowrap">
+                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                        {item.position}
+                      </div>
+                    </td>
+                    <td className="px-4 py-4 whitespace-nowrap">
+                      <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                        {item.division.name}
+                      </span>
+                    </td>
+                    <td className="px-4 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <div className="flex justify-end space-x-2">
+                        <Button
+                          variant="secondary"
+                          size="sm"
+                          onClick={() => openModal(item)}
+                        >
+                          Edit
+                        </Button>
+                        <Button
+                          variant="danger"
+                          size="sm"
+                          onClick={() => handleDelete(item.id)}
+                        >
+                          Delete
+                        </Button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              )}
+            </tbody>
+          </table>
+        </div>
       </div>
 
-      {/* Pagination */}
-      {totalPages > 1 && (
+      {/* Pagination - Only show if there are multiple pages */}
+      {paginationInfo.totalPages > 1 && (
         <Pagination
-          paginationInfo={{
-            currentPage,
-            totalPages,
-            totalItems: filtered.length,
-            startIndex: startIdx,
-            endIndex: startIdx + paginated.length,
-            hasMorePages: currentPage < totalPages,
-          }}
+          paginationInfo={paginationInfo}
           onPageChange={setCurrentPage}
         />
       )}
