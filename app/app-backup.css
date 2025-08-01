@@ -29,40 +29,16 @@ html:not(.dark) {
 /* ========== ROOT & BODY ELEMENTS - SMOOTH TRANSITIONS ========== */
 html,
 body {
-  background-color: rgb(249 250 251) !important; /* gray-50 */
-  color: rgb(17 24 39) !important; /* gray-900 */
   transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 .dark html,
 .dark body {
-  background-color: rgb(17 24 39) !important; /* gray-900 */
-  color: rgb(255 255 255) !important;
   transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
 /* ========== STRUCTURAL ELEMENTS ========== */
-main,
-section,
-article,
-aside,
-header,
-footer,
-nav,
-div:not([class*="bg-"]):not([style*="background"]) {
-  color: rgb(17 24 39); /* gray-900 */
-}
-
-.dark main,
-.dark section,
-.dark article,
-.dark aside,
-.dark header,
-.dark footer,
-.dark nav,
-.dark div:not([class*="bg-"]):not([style*="background"]) {
-  color: rgb(255 255 255);
-}
+/* Removed forcing rules - let Tailwind handle backgrounds and colors */
 
 /* ========== TEXT ELEMENTS - FULL CONTRAST ========== */
 h1,
@@ -256,29 +232,14 @@ button[type="reset"],
   color: rgb(147 197 253); /* blue-300 */
 }
 
+/* ========== COMPONENT STYLING - LET TAILWIND HANDLE BACKGROUNDS ========== */
+/* Removed forcing background rules - let Tailwind handle all styling */
+
 .card,
 .panel,
-[class*="bg-white"],
-[class*="bg-gray-50"],
-[class*="bg-gray-100"],
 .modal,
 .dropdown,
 .tooltip {
-  background-color: rgb(255 255 255) !important;
-  color: rgb(17 24 39) !important;
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.dark .card,
-.dark .panel,
-.dark [class*="bg-white"],
-.dark [class*="bg-gray-50"],
-.dark [class*="bg-gray-100"],
-.dark .modal,
-.dark .dropdown,
-.dark .tooltip {
-  background-color: rgb(31 41 55) !important; /* gray-800 */
-  color: rgb(255 255 255) !important;
   transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1) !important;
 }
 
@@ -352,15 +313,24 @@ pattern {
 :not(.dark) .bg-gray-50 svg,
 :not(.dark) .bg-gray-100 svg,
 :not(.dark) .bg-gray-200 svg {
-  color: rgb(55 65 81); /* gray-700 untuk kontras yang baik */
-  fill: rgb(55 65 81);
-  stroke: rgb(55 65 81);
+  color: rgb(0 0 0); /* black untuk kontras maksimal */
+  fill: rgb(0 0 0);
+  stroke: rgb(0 0 0);
 }
 
 :not(.dark) .bg-gray-200 svg {
   color: rgb(17 24 39); /* gray-900 untuk kontras maksimal */
   fill: rgb(17 24 39);
   stroke: rgb(17 24 39);
+}
+
+/* Force input icons to be black in light mode */
+:not(.dark) .relative svg,
+:not(.dark) input + svg,
+:not(.dark) .absolute svg {
+  color: rgb(0 0 0) !important;
+  fill: rgb(0 0 0) !important;
+  stroke: rgb(0 0 0) !important;
 }
 
 /* ========== BORDER ELEMENTS ========== */
@@ -438,52 +408,7 @@ object {
     box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-/* Background color overrides - SMOOTH TRANSITIONS */
-.bg-white {
-  background-color: rgb(255 255 255) !important;
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.dark .bg-white {
-  background-color: rgb(31 41 55) !important; /* gray-800 */
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.bg-gray-50 {
-  background-color: rgb(249 250 251) !important;
-  color: rgb(17 24 39) !important;
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.dark .bg-gray-50 {
-  background-color: rgb(17 24 39) !important; /* gray-900 */
-  color: rgb(255 255 255) !important;
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.bg-gray-100 {
-  background-color: rgb(243 244 246) !important;
-  color: rgb(17 24 39) !important;
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.dark .bg-gray-100 {
-  background-color: rgb(31 41 55) !important; /* gray-800 */
-  color: rgb(255 255 255) !important;
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.bg-gray-200 {
-  background-color: rgb(229 231 235) !important;
-  color: rgb(17 24 39) !important;
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.dark .bg-gray-200 {
-  background-color: rgb(55 65 81) !important; /* gray-700 */
-  color: rgb(255 255 255) !important;
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
+/* Background color overrides - REMOVED - Let Tailwind handle backgrounds */
 
 /* Text color overrides */
 .text-gray-900 {
@@ -821,16 +746,7 @@ body * {
   color: rgb(255 255 255);
 }
 
-/* Background color overrides - SMOOTH TRANSITIONS */
-.bg-white {
-  background-color: rgb(255 255 255) !important;
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
-
-.dark .bg-white {
-  background-color: rgb(31 41 55) !important; /* gray-800 */
-  transition: all 150ms cubic-bezier(0.4, 0, 0.2, 1) !important;
-}
+/* Background color overrides - REMOVED DUPLICATE */
 
 .bg-gray-50 {
   background-color: rgb(249 250 251) !important;

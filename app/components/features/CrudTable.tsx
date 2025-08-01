@@ -110,7 +110,7 @@ export function CrudTable() {
               </svg>
             </div>
             <div className="ml-3">
-              <p className="text-sm text-red-700 dark:text-red-400">{error}</p>
+              <p className="text-sm !text-red-700 dark:!text-red-400">{error}</p>
             </div>
           </div>
         </div>
@@ -122,19 +122,19 @@ export function CrudTable() {
           <table className="min-w-full divide-y divide-gray-200 dark:divide-gray-700">
             <thead className="bg-gray-50 dark:bg-gray-900">
               <tr>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-900 dark:text-gray-300 uppercase tracking-wider">
                   Name
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-900 dark:text-gray-300 uppercase tracking-wider">
                   Phone
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-900 dark:text-gray-300 uppercase tracking-wider">
                   Position
                 </th>
-                <th className="px-4 py-3 text-left text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-3 text-left text-xs font-medium text-gray-900 dark:text-gray-300 uppercase tracking-wider">
                   Division
                 </th>
-                <th className="px-4 py-3 text-right text-xs font-medium text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+                <th className="px-4 py-3 text-right text-xs font-medium text-gray-900 dark:text-gray-300 uppercase tracking-wider">
                   Actions
                 </th>
               </tr>
@@ -145,19 +145,19 @@ export function CrudTable() {
                   <td colSpan={5} className="px-4 py-8 text-center">
                     <div className="flex items-center justify-center">
                       <div className="animate-spin rounded-full h-6 w-6 border-b-2 border-blue-600"></div>
-                      <span className="ml-2 text-gray-500 dark:text-gray-400">Loading...</span>
+                      <span className="ml-2 text-gray-900 dark:text-gray-300">Loading...</span>
                     </div>
                   </td>
                 </tr>
               ) : items.length === 0 ? (
                 <tr>
                   <td colSpan={5} className="px-4 py-8 text-center">
-                    <div className="text-gray-500 dark:text-gray-400">
+                    <div className="text-gray-900 dark:text-gray-300">
                       <svg className="mx-auto h-12 w-12 text-gray-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M20 13V6a2 2 0 00-2-2H6a2 2 0 00-2 2v7m16 0v5a2 2 0 01-2 2H6a2 2 0 01-2-2v-5m16 0h-2.586a1 1 0 00-.707.293l-2.414 2.414a1 1 0 01-.707.293h-3.172a1 1 0 01-.707-.293l-2.414-2.414A1 1 0 006.586 13H4" />
                       </svg>
-                      <h3 className="mt-2 text-sm font-medium">No employees found</h3>
-                      <p className="mt-1 text-sm text-gray-400">
+                      <h3 className="mt-2 text-sm font-medium text-gray-900 dark:text-gray-200">No employees found</h3>
+                      <p className="mt-1 text-sm text-gray-900 dark:text-gray-300">
                         {searchQuery ? "Try adjusting your search terms." : "Get started by adding a new employee."}
                       </p>
                     </div>
@@ -175,17 +175,17 @@ export function CrudTable() {
                       </div>
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                      <div className="text-sm text-gray-900 dark:text-gray-300">
                         {item.phone}
                       </div>
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap">
-                      <div className="text-sm text-gray-500 dark:text-gray-400">
+                      <div className="text-sm text-gray-900 dark:text-gray-300">
                         {item.position}
                       </div>
                     </td>
                     <td className="px-4 py-4 whitespace-nowrap">
-                      <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
+                      <span className="inline-flex px-2 py-1 text-xs font-semibold rounded-full !bg-blue-200 !text-blue-800 dark:!bg-blue-900 dark:!text-blue-100">
                         {item.division.name}
                       </span>
                     </td>

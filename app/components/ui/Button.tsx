@@ -25,7 +25,7 @@ export function Button({
     primary:
       "!bg-gradient-to-r !from-cyan-400 !to-blue-500 !text-white hover:!from-cyan-300 hover:!to-blue-400 focus:!ring-cyan-400 !shadow-lg hover:!shadow-xl hover:!shadow-cyan-500/25 dark:!from-cyan-400 dark:!to-blue-500 dark:hover:!from-cyan-300 dark:hover:!to-blue-400 !border !border-cyan-400 dark:!border-cyan-300 hover:!border-cyan-300 dark:hover:!border-cyan-200 !font-semibold",
     secondary:
-      "bg-gradient-to-r from-gray-100 to-gray-200 text-gray-700 hover:from-gray-200 hover:to-gray-300 focus:ring-gray-400 shadow-md hover:shadow-xl dark:from-gray-700 dark:to-gray-600 dark:text-gray-100 dark:hover:from-gray-600 dark:hover:to-gray-500 border border-gray-300 dark:border-gray-500",
+      "bg-gradient-to-r from-gray-100 to-gray-200 !text-gray-800 hover:from-gray-200 hover:to-gray-300 focus:ring-gray-400 shadow-md hover:shadow-xl dark:from-gray-700 dark:to-gray-600 dark:!text-gray-100 dark:hover:from-gray-600 dark:hover:to-gray-500 border border-gray-300 dark:border-gray-500",
     danger:
       "bg-gradient-to-r from-red-500 to-red-600 text-white hover:from-red-600 hover:to-red-700 focus:ring-red-500 shadow-md hover:shadow-xl dark:from-red-400 dark:to-red-500 dark:hover:from-red-500 dark:hover:to-red-600 border border-red-600 dark:border-red-400",
     ghost:

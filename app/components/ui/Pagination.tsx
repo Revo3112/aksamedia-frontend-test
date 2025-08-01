@@ -43,7 +43,7 @@ export function Pagination({ paginationInfo, onPageChange, className = '' }: Pag
   return (
     <div className={`flex items-center justify-between ${className}`}>
       {/* Results info */}
-      <div className="text-sm text-gray-700 dark:text-gray-300">
+      <div className="text-sm" style={{ color: '#000000 !important' }}>
         Showing {startIndex + 1} to {endIndex} of {totalItems} results
       </div>
 
@@ -53,7 +53,8 @@ export function Pagination({ paginationInfo, onPageChange, className = '' }: Pag
         <button
           onClick={() => onPageChange(currentPage - 1)}
           disabled={currentPage === 1}
-          className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700"
+          className="px-3 py-2 text-sm font-medium !bg-white !border !border-gray-300 rounded-md hover:!bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:!bg-gray-800 dark:!border-gray-600 dark:!text-gray-300 dark:hover:!bg-gray-700"
+          style={{ color: '#000000 !important' }}
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M12.707 5.293a1 1 0 010 1.414L9.414 10l3.293 3.293a1 1 0 01-1.414 1.414l-4-4a1 1 0 010-1.414l4-4a1 1 0 011.414 0z" clipRule="evenodd" />
@@ -67,7 +68,8 @@ export function Pagination({ paginationInfo, onPageChange, className = '' }: Pag
               return (
                 <span
                   key={`dots-${index}`}
-                  className="px-3 py-2 text-sm font-medium text-gray-500 dark:text-gray-400"
+                  className="px-3 py-2 text-sm font-medium dark:!text-gray-300"
+                  style={{ color: '#000000 !important' }}
                 >
                   ...
                 </span>
@@ -84,10 +86,11 @@ export function Pagination({ paginationInfo, onPageChange, className = '' }: Pag
                 className={`
                   px-3 py-2 text-sm font-medium rounded-md transition-colors
                   ${isActive
-                    ? 'bg-blue-600 text-white border-blue-600'
-                    : 'text-gray-700 bg-white border border-gray-300 hover:bg-gray-50 dark:bg-gray-800 dark:border-gray-600 dark:text-gray-300 dark:hover:bg-gray-700'
+                    ? '!bg-blue-600 !text-white !border-blue-600'
+                    : '!bg-white !border !border-gray-300 hover:!bg-gray-50 dark:!bg-gray-800 dark:!border-gray-600 dark:!text-gray-200 dark:hover:!bg-gray-700'
                   }
                 `}
+                style={!isActive ? { color: '#000000 !important' } : {}}
               >
                 {pageNumber}
               </button>
@@ -99,7 +102,8 @@ export function Pagination({ paginationInfo, onPageChange, className = '' }: Pag
         <button
           onClick={() => onPageChange(currentPage + 1)}
           disabled={currentPage === totalPages}
-          className="px-3 py-2 text-sm font-medium text-gray-500 bg-white border border-gray-300 rounded-md hover:bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:bg-gray-800 dark:border-gray-600 dark:text-gray-400 dark:hover:bg-gray-700"
+          className="px-3 py-2 text-sm font-medium !bg-white !border !border-gray-300 rounded-md hover:!bg-gray-50 disabled:opacity-50 disabled:cursor-not-allowed dark:!bg-gray-800 dark:!border-gray-600 dark:!text-gray-300 dark:hover:!bg-gray-700"
+          style={{ color: '#000000 !important' }}
         >
           <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 20 20">
             <path fillRule="evenodd" d="M7.293 14.707a1 1 0 010-1.414L10.586 10 7.293 6.707a1 1 0 011.414-1.414l4 4a1 1 0 010 1.414l-4 4a1 1 0 01-1.414 0z" clipRule="evenodd" />

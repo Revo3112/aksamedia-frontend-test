@@ -22,7 +22,7 @@ export function Input({
       {label && (
         <label
           htmlFor={inputId}
-          className="block text-sm font-medium text-gray-700 dark:text-gray-200"
+          className="block text-sm font-medium text-black dark:text-gray-200"
         >
           {label}
         </label>
@@ -30,7 +30,7 @@ export function Input({
 
       <div className="relative">
         {icon && (
-          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-500 dark:text-gray-400">
+          <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-600 dark:text-gray-400">
             {icon}
           </div>
         )}
@@ -39,13 +39,13 @@ export function Input({
           id={inputId}
           className={`
             block w-full px-3 py-2.5 border rounded-lg shadow-sm
-            placeholder-gray-500 dark:placeholder-gray-400
+            placeholder-gray-600 dark:placeholder-gray-400
             focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent
             transition-all duration-200
             ${icon ? 'pl-10' : ''}
             ${error
               ? 'border-red-400 bg-red-50 dark:border-red-500 dark:bg-red-900/20 text-red-800 dark:text-red-200'
-              : 'border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-800 text-gray-800 dark:text-gray-100 hover:border-gray-400 dark:hover:border-gray-500'
+              : 'border-gray-300 bg-white dark:border-gray-600 dark:bg-gray-800 hover:border-gray-400 dark:hover:border-gray-500 text-black dark:text-gray-100'
             }
             disabled:opacity-50 disabled:cursor-not-allowed
             ${className}
@@ -64,7 +64,7 @@ export function Input({
       )}
 
       {helperText && !error && (
-        <p className="text-sm text-gray-600 dark:text-gray-300">
+        <p className="text-sm text-gray-700 dark:text-gray-300">
           {helperText}
         </p>
       )}

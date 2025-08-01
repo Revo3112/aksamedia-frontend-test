@@ -60,7 +60,7 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
           <div>
             <div className="mt-3 text-center sm:mt-0 sm:text-left">
               <h3
-                className="text-lg leading-6 font-medium text-gray-900 dark:text-gray-100 mb-4"
+                className="text-lg leading-6 font-medium text-black dark:text-gray-100 mb-4"
                 id="modal-title"
               >
                 {title}
