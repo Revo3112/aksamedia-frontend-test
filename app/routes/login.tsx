@@ -22,9 +22,30 @@ export default function Login() {
     general: "",
   });
   const [isLoading, setIsLoading] = useState(false);
+  const [isDarkMode, setIsDarkMode] = useState(false);
 
   const { login, isAuthenticated } = useAuth();
   const navigate = useNavigate();
+
+  // Check theme on mount and listen for changes
+  useEffect(() => {
+    const checkTheme = () => {
+      const isDark = document.documentElement.classList.contains('dark') ||
+                     document.documentElement.getAttribute('data-theme') === 'dark';
+      setIsDarkMode(isDark);
+    };
+
+    checkTheme();
+
+    // Listen for theme changes
+    const observer = new MutationObserver(checkTheme);
+    observer.observe(document.documentElement, {
+      attributes: true,
+      attributeFilter: ['class', 'data-theme']
+    });
+
+    return () => observer.disconnect();
+  }, []);
 
   // Redirect if already authenticated
   useEffect(() => {
@@ -97,7 +118,16 @@ export default function Login() {
     };
 
   return (
-    <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-blue-50 dark:from-gray-900 dark:to-gray-800 py-12 px-4 sm:px-6 lg:px-8">
+    <div
+      className="min-h-screen flex items-center justify-center py-12 px-4 sm:px-6 lg:px-8"
+      style={{
+        background: isDarkMode
+          ? 'linear-gradient(to bottom right, #111827, #1f2937)'
+          : 'linear-gradient(to bottom right, #ffffff, #f0f9ff)',
+        backgroundColor: isDarkMode ? '#111827' : '#ffffff',
+        transition: 'all 150ms cubic-bezier(0.4, 0, 0.2, 1)'
+      }}
+    >
       <div className="max-w-md w-full space-y-8">
         <div>
           <div className="flex justify-center">
@@ -202,7 +232,16 @@ export default function Login() {
             </Button>
 
             {/* Demo credentials info */}
-            <div className="mt-6 p-4 bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-blue-900/20 dark:to-indigo-900/20 rounded-xl border border-blue-200 dark:border-blue-800">
+            <div
+              className="mt-6 p-4 rounded-xl border"
+              style={{
+                background: isDarkMode
+                  ? 'linear-gradient(to right, rgba(37, 99, 235, 0.1), rgba(79, 70, 229, 0.1))'
+                  : 'linear-gradient(to right, rgba(239, 246, 255, 0.8), rgba(224, 231, 255, 0.6))',
+                borderColor: isDarkMode ? 'rgb(59, 130, 246)' : 'rgb(191, 219, 254)',
+                transition: 'all 150ms cubic-bezier(0.4, 0, 0.2, 1)'
+              }}
+            >
               <h3 className="text-sm font-semibold text-blue-800 dark:text-blue-200 mb-2 flex items-center gap-2">
                 <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 20 20">
                   <path fillRule="evenodd" d="M18 10a8 8 0 11-16 0 8 8 0 0116 0zm-7-4a1 1 0 11-2 0 1 1 0 012 0zM9 9a1 1 0 000 2v3a1 1 0 001 1h1a1 1 0 100-2v-3a1 1 0 00-1-1H9z" clipRule="evenodd" />
