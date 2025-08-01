@@ -319,20 +319,45 @@ pattern {
   stroke: currentColor;
 }
 
-/* ========== DASHBOARD ICONS - TERANG/PUTIH UNTUK LIGHT MODE ========== */
-:not(.dark) svg,
-:not(.dark) path,
-:not(.dark) circle,
-:not(.dark) rect,
-:not(.dark) polygon,
-:not(.dark) polyline,
-:not(.dark) line,
-:not(.dark) ellipse,
-:not(.dark) g {
-  color: rgb(255 255 255);
-  fill: rgb(255 255 255);
-  stroke: rgb(255 255 255);
+/* Light mode icon colors - using gray-600 for good contrast */
+:not(.dark) svg {
+  color: rgb(75 85 99) !important; /* gray-600 - good contrast on light backgrounds */
 }
+
+/* Specific overrides for different contexts */
+:not(.dark) .text-yellow-600 {
+  color: rgb(202 138 4) !important; /* yellow-600 */
+}
+
+:not(.dark) .text-slate-600 {
+  color: rgb(71 85 105) !important; /* slate-600 */
+}
+
+:not(.dark) .text-purple-600 {
+  color: rgb(147 51 234) !important; /* purple-600 */
+}
+
+:not(.dark) .text-blue-600 {
+  color: rgb(37 99 235) !important; /* blue-600 */
+}
+
+:not(.dark) .text-blue-700 {
+  color: rgb(29 78 216) !important; /* blue-700 */
+}
+
+:not(.dark) .text-red-600 {
+  color: rgb(220 38 38) !important; /* red-600 */
+}
+
+:not(.dark) .text-gray-500 {
+  color: rgb(107 114 128) !important; /* gray-500 */
+}
+
+:not(.dark) .text-gray-600 {
+  color: rgb(75 85 99) !important; /* gray-600 */
+}
+
+/* Specific overrides for different contexts */
 
 :not(.dark) .theme-toggle-switch svg,
 :not(.dark) .theme-toggle-switch path,
@@ -352,15 +377,15 @@ pattern {
 :not(.dark) .bg-gray-50 svg,
 :not(.dark) .bg-gray-100 svg,
 :not(.dark) .bg-gray-200 svg {
-  color: rgb(55 65 81); /* gray-700 untuk kontras yang baik */
-  fill: rgb(55 65 81);
-  stroke: rgb(55 65 81);
+  color: rgb(55 65 81) !important; /* gray-700 untuk kontras yang baik */
+  fill: rgb(55 65 81) !important;
+  stroke: rgb(55 65 81) !important;
 }
 
 :not(.dark) .bg-gray-200 svg {
-  color: rgb(17 24 39); /* gray-900 untuk kontras maksimal */
-  fill: rgb(17 24 39);
-  stroke: rgb(17 24 39);
+  color: rgb(17 24 39) !important; /* gray-900 untuk kontras maksimal */
+  fill: rgb(17 24 39) !important;
+  stroke: rgb(17 24 39) !important;
 }
 
 /* ========== BORDER ELEMENTS ========== */
